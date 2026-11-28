@@ -6,6 +6,7 @@ import {
   normalizeForComparison,
   parseValidationError,
   pluralize,
+  secondsToClock,
   secondsToHis,
   secondsToHumanReadable,
   slugToTitle,
@@ -30,6 +31,42 @@ describe('formatters utils', () => {
     [137241, '38 hr 7 min'],
   ])('formats %d seconds to human readable', (seconds, formatted) => {
     expect(secondsToHumanReadable(seconds)).toBe(formatted)
+  })
+
+  it('[QP-SMLARGE-6-1] Shows a length under one hour as minutes and two-digit seconds', () => {
+    expect(secondsToClock(185)).toBe('3:05')
+  })
+
+  it('[QP-SMLARGE-6-2] Shows a single-digit minute count without padding when seconds are 59', () => {
+    expect(secondsToClock(59)).toBe('0:59')
+  })
+
+  it('[QP-SMLARGE-6-3] Shows 3599 seconds as 59:59, the last length under one hour', () => {
+    expect(secondsToClock(3599)).toBe('59:59')
+  })
+
+  it('[QP-SMLARGE-6-4] Shows a length over one hour as hours, two-digit minutes and two-digit seconds', () => {
+    expect(secondsToClock(3725)).toBe('1:02:05')
+  })
+
+  it('[QP-SMLARGE-6-5] Shows exactly one hour as 1:00:00', () => {
+    expect(secondsToClock(3600)).toBe('1:00:00')
+  })
+
+  it('[QP-SMLARGE-6-6] Drops the fraction of a second instead of rounding it', () => {
+    expect(secondsToClock(185.7)).toBe('3:05')
+  })
+
+  it('[QP-SMLARGE-6-7] Shows a negative length as 0:00', () => {
+    expect(secondsToClock(-5)).toBe('0:00')
+  })
+
+  it('[QP-SMLARGE-6-8] Shows a missing length as 0:00', () => {
+    expect(secondsToClock()).toBe('0:00')
+  })
+
+  it('[QP-SMLARGE-6-9] Shows a length of zero as 0:00', () => {
+    expect(secondsToClock(0)).toBe('0:00')
   })
 
   it('parses validation error', () => {
