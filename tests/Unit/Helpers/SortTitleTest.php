@@ -39,4 +39,10 @@ class SortTitleTest extends TestCase
     {
         self::assertSame(SortTitle::MAX_LENGTH, mb_strlen(SortTitle::fromTitle(str_repeat('ê', 300))));
     }
+
+    #[Test]
+    public function moveAnArticleToTheEndOfTheSortValue(): void
+    {
+        self::assertSame('Ocean, An', SortTitle::fromTitle('An Ocean'));
+    }
 }
