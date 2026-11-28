@@ -11,7 +11,7 @@ class SortTitle
 {
     public const int MAX_LENGTH = 191;
 
-    public const array ARTICLES = ['The', 'A', 'El', 'La', 'Los', 'Las', 'Le', 'Les'];
+    public const array ARTICLES = ['The', 'A', 'An', 'El', 'La', 'Los', 'Las', 'Le', 'Les'];
 
     public static function fromTitle(string $title): string
     {

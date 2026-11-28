@@ -3,6 +3,7 @@
 namespace Tests\Unit\Helpers;
 
 use App\Helpers\SortTitle;
+use App\Models\Song;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -38,5 +39,29 @@ class SortTitleTest extends TestCase
     public function limitTheLength(): void
     {
         self::assertSame(SortTitle::MAX_LENGTH, mb_strlen(SortTitle::fromTitle(str_repeat('ê', 300))));
+    }
+
+    #[Test]
+    public function sortsAnOceanAsOceanAnWhenSaved(): void
+    {
+        $song = Song::factory()->createOne(['title' => 'An Ocean']);
+
+        self::assertSame('Ocean, An', $song->refresh()->title_sort);
+    }
+
+    #[Test]
+    public function keepsTheSongSortTitleAsSongTheWhenSaved(): void
+    {
+        $song = Song::factory()->createOne(['title' => 'The Song']);
+
+        self::assertSame('Song, The', $song->refresh()->title_sort);
+    }
+
+    #[Test]
+    public function keepsASongSortTitleAsSongAWhenSaved(): void
+    {
+        $song = Song::factory()->createOne(['title' => 'A Song']);
+
+        self::assertSame('Song, A', $song->refresh()->title_sort);
     }
 }
